@@ -1,0 +1,22 @@
+<table id="players-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Team</th>
+      <th>ESPN Rank</th>
+      <th>CBS Rank</th>
+      <th>Fantasy Pros Rank</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @players.each do |player| %>
+      <tr>
+        <td><%= player.name %></td>
+        <td><%= player.team %></td>
+        <td><%= player.espn_rank %></td>
+        <td><%= player.cbs_rank %></td>
+        <td><%= player.fantasy_pros_rank %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

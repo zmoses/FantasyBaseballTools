@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  espn_rank: 1
+  cbs_rank: 1
+  fantasy_pros_rank: 1
+  team: MyString
+
+two:
+  name: MyString
+  espn_rank: 1
+  cbs_rank: 1
+  fantasy_pros_rank: 1
+  team: MyString
