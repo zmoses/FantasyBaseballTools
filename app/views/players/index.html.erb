@@ -1,21 +1,20 @@
-<table id="players-table">
+
+<table id="players-table" class="table-fixed border border-gray-400 border-collapse">
   <thead>
-    <tr>
-      <th>Name</th>
-      <th>Team</th>
-      <th>ESPN Rank</th>
-      <th>CBS Rank</th>
-      <th>Fantasy Pros Rank</th>
+    <tr class="bg-gray-200">
+      <th class="border border-gray-300 p-2 w-1/2">Name</th>
+      <th class="border border-gray-300 p-2 w-1/8">ESPN Rank</th>
+      <th class="border border-gray-300 p-2 w-1/8">CBS Rank</th>
+      <th class="border border-gray-300 p-2 w-1/8">Fantasy Pros Rank</th>
     </tr>
   </thead>
   <tbody>
     <% @players.each do |player| %>
       <tr>
-        <td><%= player.name %></td>
-        <td><%= player.team %></td>
-        <td><%= player.espn_rank %></td>
-        <td><%= player.cbs_rank %></td>
-        <td><%= player.fantasy_pros_rank %></td>
+        <td class="border border-gray-300 p-2"><%= player.name %></td>
+        <td class="border border-gray-300 p-2"><%= player.espn_rank %></td>
+        <td class="border border-gray-300 p-2"><%= player.cbs_rank %></td>
+        <td class="border border-gray-300 p-2"><%= player.fantasy_pros_rank %></td>
       </tr>
     <% end %>
   </tbody>
