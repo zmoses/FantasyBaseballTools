@@ -17,21 +17,21 @@
   <table id="players-table" class="table-fixed border border-gray-400 border-collapse w-full">
     <thead>
       <tr class="bg-gray-200">
-        <th class="border border-gray-300 p-2 w-1/2">Name</th>
+        <th class="border border-gray-300 p-2 w-1/4">Name</th>
         <th class="border border-gray-300 p-2 w-1/16">ESPN Rank</th>
         <th class="border border-gray-300 p-2 w-1/16">CBS Rank</th>
         <th class="border border-gray-300 p-2 w-1/16">Fantasy Pros Rank</th>
-        <th class="border border-gray-300 p-2 w-1/16">Draft</th>
+        <th class="border border-gray-300 p-2 w-1/32">Draft</th>
       </tr>
     </thead>
     <tbody>
       <% @players.each do |player| %>
         <tr>
-          <td class="border border-gray-300 p-2 text-left inline-flex border-none"><%= player.name %><%= player.team ? image_tag("mlb_logos/#{player.team}.png", :size => "30") : "(FA)" %></td>
-          <td class="border border-gray-300 p-2 text-center"><%= player.espn_rank %></td>
-          <td class="border border-gray-300 p-2 text-center"><%= player.cbs_rank %></td>
-          <td class="border border-gray-300 p-2 text-center"><%= player.fantasy_pros_rank %></td>
-          <td class="border border-gray-300 p-2 text-center"><%= "X" %></td>
+          <td class="border-b border-gray-300 p-2 w-full text-left inline-flex"><%= player.team ? image_tag("mlb_logos/#{player.team}.png", :size => "30") : "(FA)" %><%= player.name %></td>
+          <td class="border border-gray-300 p-2 w-full text-center"><%= player.espn_rank %></td>
+          <td class="border border-gray-300 p-2 w-full text-center"><%= player.cbs_rank %></td>
+          <td class="border border-gray-300 p-2 w-full text-center"><%= player.fantasy_pros_rank %></td>
+          <td class="border border-gray-300 p-2 w-full text-center"><%= image_tag("claimed.png") %></td>
         </tr>
       <% end %>
     </tbody>
