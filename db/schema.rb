@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_034855) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_143014) do
+  create_table "espn_positions", force: :cascade do |t|
+    t.string "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "espn_positions_players", id: false, force: :cascade do |t|
+    t.integer "player_id", null: false
+    t.integer "espn_position_id", null: false
+    t.index ["espn_position_id", "player_id"], name: "index_espn_positions_players_on_espn_position_id_and_player_id"
+    t.index ["player_id", "espn_position_id"], name: "index_espn_positions_players_on_player_id_and_espn_position_id"
+  end
+
   create_table "players", force: :cascade do |t|
     t.string "name"
     t.integer "espn_rank"
