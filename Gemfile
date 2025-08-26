@@ -49,6 +49,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Always used pry for debugging, guess I'll keep using it
+  gem "pry"
+
+  # Help detect n+1 queries
+  gem "bullet"
 end
 
 group :development do
