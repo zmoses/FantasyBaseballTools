@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_22_043701) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_034855) do
   create_table "players", force: :cascade do |t|
     t.string "name"
     t.integer "espn_rank"
@@ -20,5 +20,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_22_043701) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "drafted", default: false, null: false
+    t.string "searchable_name"
+    t.index ["searchable_name", "team"], name: "index_players_on_searchable_name_and_team", unique: true
   end
 end
