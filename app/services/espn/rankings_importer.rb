@@ -13,7 +13,7 @@ module Espn
         searchable_name: Player.searchable_name(player_node.children[2].text),
         team: player_node.children[3].text,
         espn_rank: player_node.children.first.text.to_i,
-        position: player_node.children[4].text.split("/")
+        positions: player_node.children[4].text.split("/")
       }
     end
   end
