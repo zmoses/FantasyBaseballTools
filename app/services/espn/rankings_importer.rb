@@ -10,11 +10,19 @@ module Espn
 
     def updatable_player(player_node)
       {
-        searchable_name: Player.searchable_name(player_node.children[2].text),
+        name: player_node.children[2].text,
         team: player_node.children[3].text,
         espn_rank: player_node.children.first.text.to_i,
-        positions: player_node.children[4].text.split("/")
+        eligible_positions: player_node.children[4].text.split("/")
       }
+    end
+
+    def position_map
+      @position_map ||= EspnPosition.all.index_by(&:position)
+    end
+
+    def additional_updates(player, attrs)
+      player.espn_positions = attrs[:eligible_positions].map { |p| position_map[p] }.compact
     end
   end
 end

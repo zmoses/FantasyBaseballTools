@@ -9,6 +9,7 @@ class RankingsAggregator < ServiceObject
     # Need to load all the importer classes or .descendants won't fine them.
     Dir[Rails.root.join("app/services/*/*_importer.rb")].each { |file| require file }
 
-    BaseImporter.descendants
+    first_importer = Espn::RankingsImporter
+    BaseImporter.descendants.reject { |descendant| descendant == first_importer }.unshift(first_importer)
   end
 end

@@ -8,25 +8,14 @@ class BaseImporter < ServiceObject
   private
 
   def save_players
-    position_map = EspnPosition.all.index_by(&:position)
-    suspended_players = [ "emmanuelclase" ]
     players.each do |attrs|
-      next if suspended_players.include?(attrs[:searchable_name])
+      player = Player.find_best_match(name: attrs[:name], team: attrs[:team], position: attrs[:position])
+      next unless player
 
-      player = Player.find_by(searchable_name: attrs[:searchable_name], team: attrs[:team])
-      if player.nil?
-        possible_players = Player.where(searchable_name: attrs[:searchable_name])
-        if possible_players.count == 1
-          player = possible_players.first
-        elsif possible_players.count == 0
-          binding.pry
-        else
-          # TODO: Solve this problem more gracefully
-          raise "Couldn't uniquely identify player #{attrs[:searchable_name]} (#{possible_players.count} matches)"
-        end
-      end
-      player.update_column(:espn_rank, attrs[:espn_rank])
-      player.espn_positions = attrs[:positions].map { |p| position_map[p] }.compact
+      rank_field = "#{ranking_type}_rank".to_sym
+      player.update_column(rank_field, attrs[rank_field])
+
+      additional_updates(player, attrs)
     end
   end
 
@@ -36,5 +25,13 @@ class BaseImporter < ServiceObject
 
   def players
     @players ||= table_content.map { |player_row| updatable_player(player_row) }
+  end
+
+  def ranking_type
+    self.class.module_parent.to_s.downcase
+  end
+
+  def additional_updates(player, attrs)
+    # Used for overriding in subclasses
   end
 end
