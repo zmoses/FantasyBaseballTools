@@ -2,6 +2,8 @@ class Player < ApplicationRecord
   has_and_belongs_to_many :espn_positions
   validates :searchable_name, uniqueness: { scope: :team }
 
+  class UnknownPlayerNameError < StandardError; end
+
   def self.searchable_name(name)
     name_no_suffix = name.downcase.gsub("-", " ").gsub(/ (jr|sr|jr\.|sr\.|ii|iii|iv|v)$/, "")
     transliterated_name = ActiveSupport::Inflector.transliterate(name_no_suffix)
@@ -37,7 +39,7 @@ class Player < ApplicationRecord
 
     return matching_players.first if matching_players.count == 1
 
-    raise "Couldn't uniquely identify player name(#{name}) team(#{team}) position(#{position}) (#{matching_players.count} matches)" if matching_players.count.positive?
+    raise UnknownPlayerNameError, "(#{matching_players.count} matches) players found with params: name(#{name}) team(#{team}) position(#{position})" if matching_players.count.positive?
 
     # If we have no matches, loosen the params and try again
     if matching_players.count.zero?
@@ -57,8 +59,7 @@ class Player < ApplicationRecord
       matching_players = Player.where(searchable_name: Player.searchable_name(name))
       return matching_players.first if matching_players.count == 1
 
-      binding.pry
-      raise "Couldn't find player #{name} (#{matching_players.count} matches)"
+      raise UnknownPlayerNameError, "Couldn't find player #{name} (#{matching_players.count} matches)"
     end
   end
 end
