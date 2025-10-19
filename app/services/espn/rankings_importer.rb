@@ -5,7 +5,7 @@ module Espn
     private
 
     def table_content
-      html_content.css('h2:contains("Top 300 Rankings for 2025")').first.parent.next_element.children.last.children
+      html_content.css('h2:contains("Top 300 Rankings for")').first.parent.next_element.children.last.children
     end
 
     def updatable_player(player_node)
