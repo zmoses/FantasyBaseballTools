@@ -57,6 +57,12 @@ class PlayersController < ApplicationController
     end
   end
 
+  def reset_player_data
+    ImportRankingsJob.perform_later
+
+    redirect_to players_path, notice: "Player data reset has started. Please refresh this page in a few minutes to see updated rankings.", status: :see_other
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_player
