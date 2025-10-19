@@ -1,0 +1,20 @@
+div.flex.flex-col
+  div.flex.justify-end.mb-2
+    =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: players_reset_path, method: :post } ] }
+
+  table.table-fixed.border.border-gray-400.border-collapse.w-full id="players-table"
+    thead
+      tr.bg-gray-200
+        th.border.border-gray-300.p-2.w-1/4 Name
+        th.border.border-gray-300.p-2.w-1/16 ESPN Rank
+        th.border.border-gray-300.p-2.w-1/16 CBS Rank
+        th.border.border-gray-300.p-2.w-1/16 Fantasy Pros Rank
+        th.border.border-gray-300.p-2.w-1/32 Draft
+    tbody
+      - @players.each do |player|
+        tr
+          td.border-b.border-gray-300.p-2.w-full.text-left.inline-flex= player_logo_and_name(player)
+          td.border.border-gray-300.p-2.w-full.text-center= player.espn_rank
+          td.border.border-gray-300.p-2.w-full.text-center= player.cbs_rank
+          td.border.border-gray-300.p-2.w-full.text-center= player.fantasy_pros_rank
+          td.border.border-gray-300.p-2.w-full.text-center= image_tag("claimed.png")

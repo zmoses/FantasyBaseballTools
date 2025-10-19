@@ -1,0 +1,8 @@
+div.inline-flex.rounded-md.shadow-xs
+  - buttons.each_with_index do |button, index|
+    - method = button[:method] || :get
+    = button_to button[:label],
+      button[:href],
+      method: method,
+      form: { data: button[:data] },
+      class: "#{button_base_classes} #{button_group_classes(index, buttons.length)}"
