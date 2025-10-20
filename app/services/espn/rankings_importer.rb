@@ -1,5 +1,11 @@
 module Espn
   class RankingsImporter < BaseImporter
+    # This only grabs the top 300 players, and you can draft way beyond that,
+    # usually ending up with some players other sites rank way higher. Might
+    # need to change this to grabbing via an API later for deeper rankings. The
+    # ESPN Fantasy API exists, but is not publicly documented and is a separate
+    # effort I've been working on. Once implemented, I'll work to bring that in
+
     RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2025-espn-cockcroft"
 
     private

@@ -17,4 +17,8 @@ div.flex.flex-col
           td.border.border-gray-300.p-2.w-full.text-center= player.espn_rank
           td.border.border-gray-300.p-2.w-full.text-center= player.cbs_rank
           td.border.border-gray-300.p-2.w-full.text-center= player.fantasy_pros_rank
-          td.border.border-gray-300.p-2.w-full.text-center= image_tag("claimed.png")
+          td.border.border-gray-300.p-2.w-full.text-center
+            = button_to "Claimed",
+              "https://google.com",
+              method: :get,
+              class: "bg-red-600 hover:bg-red-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer"
