@@ -26,15 +26,19 @@ class Player < ApplicationRecord
     # Mike == Michael
     name = "michaelsoroka" if Player.searchable_name(name) == "mikesoroka"
     # Ohtani is both a pitcher and a hitter, but ESPN counts them as one player
-    return nil if Player.searchable_name(name) == "shoheiohtanipitcher"
+    raise UnknownPlayerNameError if Player.searchable_name(name) == "shoheiohtanipitcher"
     # Dude's an idiot and probably won't every play in the MLB again
-    return nil if Player.searchable_name(name) == "emmanuelclase"
+    raise UnknownPlayerNameError if Player.searchable_name(name) == "emmanuelclase"
     # Free agent, not on the 40 man anywhere and therefore not in the DB
-    return nil if Player.searchable_name(name) == "ryanpressly"
+    raise UnknownPlayerNameError if Player.searchable_name(name) == "ryanpressly"
 
     where_clause = { searchable_name: Player.searchable_name(name) }
     where_clause[:team] = team if team
-    where_clause[:espn_positions] = { position: EspnPosition.position_map(position) } if position
+    begin
+      where_clause[:espn_positions] = { position: EspnPosition.position_map(position) } if position
+    rescue EspnPosition::UnknownPositionError
+      binding.pry
+    end
     matching_players = Player.left_joins(:espn_positions).where(where_clause).distinct
 
     return matching_players.first if matching_players.count == 1

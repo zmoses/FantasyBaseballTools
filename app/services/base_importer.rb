@@ -9,8 +9,11 @@ class BaseImporter < ServiceObject
 
   def save_players
     players.each do |attrs|
-      player = Player.find_best_match(name: attrs[:name], team: attrs[:team], position: attrs[:position])
-      next unless player
+      begin
+        player = Player.find_best_match(name: attrs[:name], team: attrs[:team], position: attrs[:position])
+      rescue Player::UnknownPlayerNameError
+        next
+      end
 
       rank_field = "#{ranking_type}_rank".to_sym
       player.update_column(rank_field, attrs[rank_field])
@@ -24,14 +27,22 @@ class BaseImporter < ServiceObject
   end
 
   def players
-    @players ||= table_content.map { |player_row| updatable_player(player_row) }
+    @players ||= players_list.map { |player_row| player_attributes(player_row) }
   end
 
   def ranking_type
-    self.class.module_parent.to_s.downcase
+    self.class.module_parent.to_s.underscore
   end
 
   def additional_updates(player, attrs)
-    # Used for overriding in subclasses
+    # Used for overriding in subclasses, but not required
+  end
+
+  def players_list
+    raise NotImplementedError, "Subclasses must implement players_list"
+  end
+
+  def player_attributes(_)
+    raise NotImplementedError, "Subclasses must implement player_attributes"
   end
 end

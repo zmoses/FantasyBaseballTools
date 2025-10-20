@@ -4,11 +4,11 @@ module Espn
 
     private
 
-    def table_content
+    def players_list
       html_content.css('h2:contains("Top 300 Rankings for")').first.parent.next_element.children.last.children
     end
 
-    def updatable_player(player_node)
+    def player_attributes(player_node)
       {
         name: player_node.children[2].text,
         team: player_node.children[3].text,

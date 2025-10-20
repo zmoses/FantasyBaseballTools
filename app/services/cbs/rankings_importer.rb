@@ -4,11 +4,11 @@ module Cbs
 
     private
 
-    def table_content
+    def players_list
       html_content.css('span:contains("Consensus")').first.parent.parent.parent.next_element.css("div.player-row")
     end
 
-    def updatable_player(player_node)
+    def player_attributes(player_node)
       {
         name: player_node.children[3].children[3].attribute_nodes[0].value.split("/").reject(&:empty?)[-2],
         position: player_node.children[3].text.lines.map(&:strip).reject(&:empty?)[1],
