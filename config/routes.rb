@@ -20,5 +20,5 @@ Rails.application.routes.draw do
   end
 
   # Defines the root path route ("/")
-  root "players#index"
+  root "draft_board#index"
 end
