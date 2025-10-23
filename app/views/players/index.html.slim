@@ -1,6 +1,6 @@
 div.flex.flex-col
   div.flex.justify-end.mb-2
-    =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: players_reset_path, method: :post } ] }
+    =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: reset_all_players_path, method: :post } ] }
 
   table.table-fixed.border.border-gray-400.border-collapse.w-full id="players-table"
     thead
@@ -12,13 +12,13 @@ div.flex.flex-col
         th.border.border-gray-300.p-2.w-1/32 Draft
     tbody
       - @players.each do |player|
-        tr
+        tr id=dom_id(player)
           td.border-b.border-gray-300.p-2.w-full.text-left.inline-flex= player_logo_and_name(player)
           td.border.border-gray-300.p-2.w-full.text-center= player.espn_rank
           td.border.border-gray-300.p-2.w-full.text-center= player.cbs_rank
           td.border.border-gray-300.p-2.w-full.text-center= player.fantasy_pros_rank
           td.border.border-gray-300.p-2.w-full.text-center
             = button_to "Claimed",
-              "https://google.com",
-              method: :get,
+              claim_player_path(player),
+              method: :patch,
               class: "bg-red-600 hover:bg-red-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer"

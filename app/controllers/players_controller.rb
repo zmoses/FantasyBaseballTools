@@ -3,7 +3,17 @@ class PlayersController < ApplicationController
 
   # GET /players or /players.json
   def index
-    @players = Player.where.not(espn_rank: nil).order(:espn_rank)
+    @players = Player.where(claimed: false).where.not(espn_rank: nil).order(:espn_rank)
+  end
+
+  def claim
+    @player = Player.find(params[:id])
+    @player.update(claimed: true)
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to players_path, notice: "Player claimed." }
+    end
   end
 
   # GET /players/1 or /players/1.json
@@ -57,7 +67,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def reset_player_data
+  def reset_all
     ResetPlayersTableJob.perform_later
 
     redirect_to players_path, notice: "Player data reset has started. Please refresh this page in a few minutes to see updated rankings.", status: :see_other

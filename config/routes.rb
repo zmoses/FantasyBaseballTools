@@ -9,7 +9,15 @@ Rails.application.routes.draw do
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  post "players/reset" => "players#reset_player_data"
+  resources :players do
+    collection do
+      post :reset_all
+    end
+
+    member do
+      patch :claim
+    end
+  end
 
   # Defines the root path route ("/")
   root "players#index"
