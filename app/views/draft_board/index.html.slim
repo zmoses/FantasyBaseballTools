@@ -15,8 +15,10 @@ div.flex.flex-col
         tr id=dom_id(player)
           td.border-b.border-gray-300.p-2.w-full.text-left.inline-flex= player_logo_and_name(player)
           td.border.border-gray-300.p-2.w-full.text-center= player.espn_rank
-          td.border.border-gray-300.p-2.w-full.text-center= player.cbs_rank
-          td.border.border-gray-300.p-2.w-full.text-center= player.fantasy_pros_rank
+          td.border.border-gray-300.p-2.w-full.text-center style=rank_diff_cell_style(player.espn_rank, player.cbs_rank)
+            = player.cbs_rank
+          td.border.border-gray-300.p-2.w-full.text-center style=rank_diff_cell_style(player.espn_rank, player.fantasy_pros_rank)
+            = player.fantasy_pros_rank
           td.border.border-gray-300.p-2.w-full.text-center
             = button_to "Claimed",
               claim_player_path(player),
