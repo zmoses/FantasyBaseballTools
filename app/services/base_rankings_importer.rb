@@ -37,10 +37,20 @@ class BaseRankingsImporter < ServiceObject
   end
 
   def players_list
+    # Return value should be an array of players that are gathered from the importer source in any
+    # format. These players will be formatted consistently for use with #player_attributes further
+    # in the chain of calls.
     raise NotImplementedError, "Subclasses must implement players_list"
   end
 
   def player_attributes(_)
+    # This handles formatting each individual player's data in a standard format:
+    # {
+    #   name:
+    #   position:
+    #   xyz_rank:
+    # }
+    # Note, for "xyz_rank", "xyz" must match the module each rankings_importer lives in.
     raise NotImplementedError, "Subclasses must implement player_attributes"
   end
 end
