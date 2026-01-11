@@ -1,26 +1,39 @@
-div.flex.flex-col
-  div.flex.justify-end.mb-2
-    =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: reset_all_players_path, method: :post } ] }
+div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate-800.shadow-md.rounded-lg.bg-clip-border
+  div.p-4.flex.items-center.justify-between.mb-2
+    div.relative
+      div.absolute.inset-y-0.start-0.flex.items-center.ps-3.pointer-events-none
+        svg.w-4.h-4.text-body xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+          path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+      input.block.w-full.max-w-96.ps-9.pe-3.py-2.bg-neutral-secondary-medium.border.border-default-medium.text-heading.text-sm.rounded-base.focus:ring-brand.focus:border-brand.px-3.py-2.5.shadow-xs.placeholder:text-body type="text" id="input-group-1" placeholder="Search"
+    div
+      =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: reset_all_players_path, method: :post } ] }
 
-  table.table-fixed.border.border-gray-400.border-collapse.w-full id="players-table"
+  table.w-full.text-center.table-auto.min-w-max id="players-table"
     thead
-      tr.bg-gray-200
-        th.border.border-gray-300.p-2.w-1/4 Name
-        th.border.border-gray-300.p-2.w-1/16 ESPN Rank
-        th.border.border-gray-300.p-2.w-1/16 CBS Rank
-        th.border.border-gray-300.p-2.w-1/16 Fantasy Pros Rank
-        th.border.border-gray-300.p-2.w-1/32 Draft
+      tr
+        th.p-4.border-b.border-slate-600.bg-slate-700.w-2/5.text-left
+          p.text-sm.font-normal.leading-none.text-slate-300 Name
+        th.p-4.border-b.border-slate-600.bg-slate-700.w-1/6
+          p.text-sm.font-normal.leading-none.text-slate-300 ESPN Rank
+        th.p-4.border-b.border-slate-600.bg-slate-700.w-1/6
+          p.text-sm.font-normal.leading-none.text-slate-300 CBS Rank
+        th.p-4.border-b.border-slate-600.bg-slate-700.w-1/6
+          p.text-sm.font-normal.leading-none.text-slate-300 Fantasy Pros Rank
+        th.p-4.border-b.border-slate-600.bg-slate-700.w-1/12
+          p.text-sm.font-normal.leading-none.text-slate-300 Draft
     tbody
       - @players.each do |player|
-        tr id=dom_id(player)
-          td.border-b.border-gray-300.p-2.w-full.text-left.inline-flex= player_logo_and_name(player)
-          td.border.border-gray-300.p-2.w-full.text-center= player.espn_rank
-          td.border.border-gray-300.p-2.w-full.text-center style=rank_diff_cell_style(player.espn_rank, player.cbs_rank)
-            = player.cbs_rank
-          td.border.border-gray-300.p-2.w-full.text-center style=rank_diff_cell_style(player.espn_rank, player.fantasy_pros_rank)
-            = player.fantasy_pros_rank
-          td.border.border-gray-300.p-2.w-full.text-center
-            = button_to "Claimed",
+        tr.hover:bg-slate-700 id=dom_id(player)
+          td.p-4.border-b.border-slate-700.text-left
+            p.text-sm.text-slate-100.font-semibold= player_logo_and_name(player)
+          td.p-4.border-b.border-slate-700
+            p.text-sm.text-slate-100.font-semibold= player.espn_rank
+          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.espn_rank, player.cbs_rank)
+            p.text-sm.text-slate-100.font-semibold= player.cbs_rank
+          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.espn_rank, player.fantasy_pros_rank)
+            p.text-sm.text-slate-100.font-semibold= player.fantasy_pros_rank
+          td.p-4.border-b.border-slate-700
+            p.text-sm.text-slate-100.font-semibold= button_to "Claimed",
               claim_player_path(player),
               method: :patch,
               class: "bg-red-600 hover:bg-red-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer"
