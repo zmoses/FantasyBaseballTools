@@ -1,24 +1,3 @@
-# README
+# Fantasy Baseball Tools
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This project is primarily a personal project to help me with managing my fantasy baseball teams. Currently, the scope is pretty small and only includes a draft board that can be used to see at a glance what major sites rank individual players and the difference vs how ESPN ranks them. More features are on the way, but until then I'll keep this short and sweet. To get it running, clone the project, install the proper Ruby version (currently 3.3.4), bundle, and run with `./bin/dev` in order for the app to pickup any Tailwind changes you make, and hit it at `localhost:3000` in your browser. More info and a better README to come!
