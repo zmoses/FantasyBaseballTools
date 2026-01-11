@@ -1,5 +1,3 @@
-require "net/http"
-
 class BaseRankingsImporter < ServiceObject
   def call
     save_players

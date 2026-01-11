@@ -5,8 +5,6 @@ module FantasyPros
     private
 
     def players_list
-      # html_content.css('span:contains("Consensus")').first.parent.parent.parent.next_element.css("div.player-row")
-
       script = html_content.css("script").find { |s| s.text.include?("var ecrData =") }
       match = script.text.match(/var ecrData\s*=\s*(\{.*?\});/m)
       raw_js_object = match[1]
