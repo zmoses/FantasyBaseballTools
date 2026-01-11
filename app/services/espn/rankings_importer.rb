@@ -6,7 +6,7 @@ module Espn
     # ESPN Fantasy API exists, but is not publicly documented and is a separate
     # effort I've been working on. Once implemented, I'll work to bring that in
 
-    RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2025-espn-cockcroft"
+    RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2026-espn-cockcroft"
 
     private
 

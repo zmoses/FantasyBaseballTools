@@ -37,6 +37,7 @@ class Player < ApplicationRecord
     begin
       where_clause[:espn_positions] = { position: EspnPosition.position_map(position) } if position
     rescue EspnPosition::UnknownPositionError
+      # TODO: Remove pry, but nice to have for now until the possibility of putting this on a delpoyed environment with error tracking
       binding.pry
     end
     matching_players = Player.left_joins(:espn_positions).where(where_clause).distinct

@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+first_base:
+  position: 1B
+
+second_base:
+  position: 2B
+
+third_base:
+  position: 3B
+
+shortstop:
+  position: SS
+
+catcher:
+  position: C
+
+relief_pitcher:
+  position: RP
+
+starting_pitcher:
+  position: SP
+
+designated_hitter:
+  position: DH
+
+outfield:
+  position: OF

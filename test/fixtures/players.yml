@@ -1,15 +1,17 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  name: MyString
+aaron_judge:
+  name: Aaron Judge
+  searchable_name: aaronjudge
   espn_rank: 1
-  cbs_rank: 1
+  cbs_rank: 2
   fantasy_pros_rank: 1
-  team: MyString
+  team: NYY
+  claimed: false
 
-two:
-  name: MyString
-  espn_rank: 1
-  cbs_rank: 1
-  fantasy_pros_rank: 1
-  team: MyString
+max_muncy_lad:
+  name: Max Muncy
+  searchable_name: maxmuncy
+  espn_rank: 150
+  cbs_rank: 145
+  fantasy_pros_rank: 148
+  team: LAD
+  claimed: false
