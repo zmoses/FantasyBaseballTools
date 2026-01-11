@@ -1,5 +1,5 @@
 module Cbs
-  class RankingsImporter < BaseImporter
+  class RankingsImporter < BaseRankingsImporter
     RANKINGS_URL = "https://www.cbssports.com/fantasy/baseball/rankings/h2h/top300/"
 
     private

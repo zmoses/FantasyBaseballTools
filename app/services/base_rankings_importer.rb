@@ -1,6 +1,6 @@
 require "net/http"
 
-class BaseImporter < ServiceObject
+class BaseRankingsImporter < ServiceObject
   def call
     save_players
   end

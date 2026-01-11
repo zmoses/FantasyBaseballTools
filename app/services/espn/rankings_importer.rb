@@ -1,5 +1,5 @@
 module Espn
-  class RankingsImporter < BaseImporter
+  class RankingsImporter < BaseRankingsImporter
     # This only grabs the top 300 players, and you can draft way beyond that,
     # usually ending up with some players other sites rank way higher. Might
     # need to change this to grabbing via an API later for deeper rankings. The
