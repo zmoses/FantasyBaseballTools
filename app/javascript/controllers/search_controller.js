@@ -3,15 +3,11 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["input", "row"]
 
-  connect() {
-    console.log("Search controller connected")
-  }
-
   filter() {
-    const query = this.inputTarget.value.toLowerCase()
+    const query = this.comparableTerm(this.inputTarget.value)
 
     this.rowTargets.forEach(row => {
-      const text = row.textContent.toLowerCase()
+      const text = this.comparableTerm(row.textContent)
 
       if (text.includes(query)) {
         row.style.display = ""
@@ -19,5 +15,9 @@ export default class extends Controller {
         row.style.display = "none"
       }
     })
+  }
+
+  comparableTerm(str) {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   }
 }
