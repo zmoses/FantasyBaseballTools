@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :draft_board, only: [ :index ]
+
   # Defines the root path route ("/")
   root "draft_board#index"
 end
