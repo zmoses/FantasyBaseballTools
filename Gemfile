@@ -57,6 +57,9 @@ group :development, :test do
 
   # Help detect n+1 queries
   gem "bullet"
+
+  # Using factories instead of fixtures
+  gem "factory_bot_rails"
 end
 
 group :development do

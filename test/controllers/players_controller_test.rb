@@ -2,7 +2,7 @@ require "test_helper"
 
 class PlayersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @player = players(:aaron_judge)
+    @player = create(:player, :aaron_judge)
   end
 
   test "should show player" do

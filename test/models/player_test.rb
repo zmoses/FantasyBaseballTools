@@ -2,9 +2,11 @@ require "test_helper"
 
 class PlayerTest < ActiveSupport::TestCase
   test "validates uniqueness of searchable_name scoped to team" do
+    existing_player = create(:player, :aaron_judge)
+
     player = Player.new(
       name: "Aaron Judge",
-      searchable_name: "aaronjudge",
+      searchable_name: existing_player.searchable_name,
       team: "NYY"
     )
 
@@ -13,9 +15,11 @@ class PlayerTest < ActiveSupport::TestCase
   end
 
   test "allows same searchable_name for different teams" do
+    existing_player = create(:player, :max_muncy_lad)
+
     player = Player.new(
       name: "Max Muncy",
-      searchable_name: "maxmuncy",
+      searchable_name: existing_player.searchable_name,
       team: "OAK"
     )
 
@@ -50,7 +54,7 @@ class PlayerTest < ActiveSupport::TestCase
   end
 
   test "#add_position_eligibility adds new position" do
-    player = players(:aaron_judge)
+    player = create(:player, :aaron_judge)
     initial_count = player.espn_positions.count
 
     player.add_position_eligibility("OF")
@@ -60,8 +64,8 @@ class PlayerTest < ActiveSupport::TestCase
   end
 
   test "#add_position_eligibility does not add duplicate position" do
-    player = players(:aaron_judge)
-    position = espn_positions(:outfield)
+    player = create(:player, :aaron_judge)
+    position = create(:espn_position, :outfield)
     player.espn_positions << position
 
     initial_count = player.espn_positions.count
@@ -71,13 +75,15 @@ class PlayerTest < ActiveSupport::TestCase
   end
 
   test ".find_best_match finds player by name only" do
-    player = Player.find_best_match(name: "Aaron Judge")
-    assert_equal players(:aaron_judge), player
+    expected_player = create(:player, :aaron_judge)
+    player = Player.find_best_match(name: expected_player.name)
+    assert_equal expected_player, player
   end
 
   test ".find_best_match finds player by name and team" do
-    player = Player.find_best_match(name: "Max Muncy", team: "LAD")
-    assert_equal players(:max_muncy_lad), player
+    expected_player = create(:player, :max_muncy_lad)
+    player = Player.find_best_match(name: expected_player.name, team: "LAD")
+    assert_equal expected_player, player
   end
 
   test ".find_best_match raises UnknownPlayerNameError when no matches found" do
@@ -88,33 +94,33 @@ class PlayerTest < ActiveSupport::TestCase
 
   test ".find_best_match falls back to searching without team" do
     # Create a player without setting up position eligibility
-    player = players(:aaron_judge)
+    player = create(:player, :aaron_judge)
 
     # Should find player even if team doesn't match exactly
-    found_player = Player.find_best_match(name: "Aaron Judge", team: "WRONG_TEAM")
+    found_player = Player.find_best_match(name: player.name, team: "WRONG_TEAM")
     assert_equal player, found_player
   end
 
   test ".find_best_match with position filters by espn_positions" do
-    player = players(:aaron_judge)
-    outfield_position = espn_positions(:outfield)
+    player = create(:player, :aaron_judge)
+    outfield_position = create(:espn_position, :outfield)
     player.espn_positions << outfield_position
 
-    found_player = Player.find_best_match(name: "Aaron Judge", position: "OF")
+    found_player = Player.find_best_match(name: player.name, position: "OF")
     assert_equal player, found_player
   end
 
   test ".find_best_match falls back to searching without position" do
-    player = players(:aaron_judge)
+    player = create(:player, :aaron_judge)
 
     # Should find player even without position match
-    found_player = Player.find_best_match(name: "Aaron Judge", position: "1B")
+    found_player = Player.find_best_match(name: player.name, position: "1B")
     assert_equal player, found_player
   end
 
   test "has_and_belongs_to_many espn_positions association" do
-    player = players(:aaron_judge)
-    position = espn_positions(:outfield)
+    player = create(:player, :aaron_judge)
+    position = create(:espn_position, :outfield)
 
     player.espn_positions << position
 

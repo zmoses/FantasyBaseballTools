@@ -2,8 +2,8 @@ require "test_helper"
 
 class EspnPositionTest < ActiveSupport::TestCase
   test "has_and_belongs_to_many players association" do
-    position = espn_positions(:outfield)
-    player = players(:aaron_judge)
+    position = create(:espn_position, :outfield)
+    player = create(:player, :aaron_judge)
 
     position.players << player
 
