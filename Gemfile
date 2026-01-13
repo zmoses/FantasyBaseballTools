@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.0.2", ">= 8.0.2.1"
+gem "rails", "~> 8.1.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use sqlite3 as the database for Active Record
@@ -54,9 +54,6 @@ group :development, :test do
 
   # Always used pry for debugging, guess I'll keep using it
   gem "pry"
-
-  # Help detect n+1 queries
-  gem "bullet"
 
   # Using factories instead of fixtures
   gem "factory_bot_rails"
