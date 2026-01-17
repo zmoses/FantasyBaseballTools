@@ -15,6 +15,11 @@ class PlayersController < ApplicationController
     end
   end
 
+  def mark_all_unclaimed
+    Player.update_all(claimed: false)
+    redirect_to draft_board_index_path
+  end
+
   def reset_all
     ResetPlayersTableJob.perform_later
 

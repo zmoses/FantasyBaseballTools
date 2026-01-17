@@ -1,3 +1,8 @@
+ruby:
+  button_list = [ { label: "Mark All Unclaimed", href: mark_all_unclaimed_players_path, method: :patch } ]
+  # TODO: This will eventually need removed as it completely wipes all players and refetches them, but helpful for debugging in the early stages. Remove eventually.
+  button_list << { label: "Populate Players", href: reset_all_players_path, method: :post }
+
 div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate-700.shadow-md.rounded-lg.bg-clip-border data-controller="search"
   div.p-4.flex.items-center.justify-between.mb-2
     div.relative
@@ -6,7 +11,7 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
           path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
       input.block.w-full.max-w-96.ps-9.pe-3.py-2.bg-neutral-secondary-medium.border.border-default-medium.text-heading.text-sm.rounded-base.focus:ring-brand.focus:border-brand.px-3.py-2.5.shadow-xs.placeholder:text-body type="text" id="input-group-1" placeholder="Search" data-search-target="input" data-action="input->search#filter"
     div
-      =render partial: "shared/button_group", locals: { buttons: [ { label: "Populate Players", href: reset_all_players_path, method: :post } ] }
+      =render partial: "shared/button_group", locals: { buttons: button_list }
 
   table.w-full.text-center.table-auto.min-w-max id="players-table"
     thead

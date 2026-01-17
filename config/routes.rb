@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :players do
     collection do
       post :reset_all
+      patch :mark_all_unclaimed
     end
 
     member do
