@@ -1,0 +1,10 @@
+#dropdown-menu {
+  inset: unset;
+  position-anchor: --dropdown-btn;
+  top: anchor(bottom);
+  right: anchor(right);
+}
+
+button[popovertarget="dropdown-menu"] {
+  anchor-name: --dropdown-btn;
+}
