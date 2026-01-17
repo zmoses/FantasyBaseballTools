@@ -1,16 +1,27 @@
+require "espn_api"
+
 module Espn
   class RankingsImporter < BaseRankingsImporter
-    # This only grabs the top 300 players, and you can draft way beyond that,
-    # usually ending up with some players other sites rank way higher. Might
-    # need to change this to grabbing via an API later for deeper rankings. The
-    # ESPN Fantasy API exists, but is not publicly documented and is a separate
-    # effort I've been working on. Once implemented, I'll work to bring that in
-
     RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2026-espn-cockcroft"
+
+    def espn_client
+      @client ||= ESPNApi::Client.new(
+        auth_key: ENV["ESPN_KEY"],
+        league_id: ENV["LEAGUE_ID"]
+      )
+    end
+
+    def api_filters
+      @filters ||= ESPNApi::Filters::Player.new.limit(600)
+    end
 
     private
 
     def players_list
+      # Grabbing via API enables a larger list to be returned, try that and fallback to scraping
+      api_players = espn_client.players_list(player_filters: api_filters)
+      return api_players if api_players
+
       html_content.css('h2:contains("Top 300 Rankings for")').first.parent.next_element.children.last.children
     end
 

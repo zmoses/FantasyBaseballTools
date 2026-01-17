@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/zmoses/ESPNFantasyBaseballAPI
+  revision: ed2154848b0fa7ea4c962b7e1660c02cff4948db
+  branch: main
+  specs:
+    espn_fantasy_baseball_api (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -414,6 +421,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
+  espn_fantasy_baseball_api!
   factory_bot_rails
   importmap-rails
   jbuilder
