@@ -13,26 +13,26 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
     div
       =render "shared/button_group", buttons: button_list
 
-  table.w-full.text-center.table-auto.min-w-max id="players-table"
+  table.w-full.text-center.table-auto.min-w-max id="players-table" data-controller="sortable"
     thead
       tr
         th.p-4.border-b.border-slate-600.bg-slate-600.w-2/5.text-left
           p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Name
-        th.p-4.border-b.border-slate-600.bg-slate-500.w-1/6
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="1" data-action="click->sortable#sort"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold ESPN Rank
-            = chevron_down_icon(tailwind_color: "text-white")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6
+            = chevron_down_icon(tailwind_color: "text-slate-400")
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="2" data-action="click->sortable#sort"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold CBS Rank
-            = chevron_down_icon
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6
+            = chevron_down_icon(tailwind_color: "text-slate-400")
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="3" data-action="click->sortable#sort"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Fantasy Pros Rank
-            = chevron_down_icon
+            = chevron_down_icon(tailwind_color: "text-slate-400")
         th.p-4.border-b.border-slate-600.bg-slate-600.w-1/12
           p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Draft
-    tbody
+    tbody data-sortable-target="body"
       - @players.each do |player|
         tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row"
           td.p-4.border-b.border-slate-700.text-left
