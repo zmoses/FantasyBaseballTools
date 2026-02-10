@@ -26,6 +26,17 @@ module Espn
     end
 
     def player_attributes(player_node)
+      if player_node.is_a?(Hash)
+        # Returned via API
+        return {
+          name: player_node.dig("player", "fullName"),
+          team: Espn::Constants::TEAMS_BY_ID[player_node.dig("player", "proTeamId")],
+          espn_rank: player_node.dig("player", "draftRanksByRankType", "STANDARD", "rank"),
+          eligible_positions: player_node.dig("player", "eligibleSlots").map { |position_id| Espn::Constants::POSITIONS_BY_ID[position_id] }
+        }
+      end
+
+      # Returned via web scraping
       {
         name: player_node.children[2].text,
         team: player_node.children[3].text,

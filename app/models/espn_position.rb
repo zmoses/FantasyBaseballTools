@@ -5,7 +5,7 @@ class EspnPosition < ApplicationRecord
 
   def self.position_map(position)
     # Valid positions, return as-is
-    return position if [ "1B", "2B", "3B", "SS", "C", "RP", "SP", "DH", "OF" ].include?(position)
+    return position if Espn::Constants::POSITIONS_BY_ID.values.include?(position)
 
     # ESPN doesn't distinguish between outfield positions
     return "OF" if [ "LF", "RF", "CF" ].include?(position)
