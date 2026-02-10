@@ -273,6 +273,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.0)
+    rb-readline (0.5.5)
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
@@ -430,6 +431,7 @@ DEPENDENCIES
   pry
   puma (>= 5.0)
   rails (~> 8.1.2)
+  rb-readline
   rubocop-rails-omakase
   selenium-webdriver
   slim-rails

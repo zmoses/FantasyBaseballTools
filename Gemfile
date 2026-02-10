@@ -56,7 +56,9 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   # Always used pry for debugging, guess I'll keep using it
+  # rb-readline necessary for pry
   gem "pry"
+  gem "rb-readline"
 
   # Using factories instead of fixtures
   gem "factory_bot_rails"

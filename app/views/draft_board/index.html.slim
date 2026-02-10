@@ -12,6 +12,12 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
       input.block.w-full.max-w-96.ps-9.pe-3.py-2.bg-neutral-secondary-medium.border.border-default-medium.text-heading.text-sm.rounded-base.focus:ring-brand.focus:border-brand.px-3.py-2.5.shadow-xs.placeholder:text-body type="text" id="input-group-1" placeholder="Search" data-search-target="input" data-action="input->search#filter"
     div
       =render "shared/button_group", buttons: button_list
+  p.px-4.pb-2.text-xs.text-slate-400
+    = "Click column headers to sort. "
+    span.text-amber-500 ⌥+click
+    = " (macOS) or "
+    span.text-amber-500 Alt+click
+    = " (Windows) CBS/Fantasy Pros to sort by difference from ESPN."
 
   table.w-full.text-center.table-auto.min-w-max id="players-table" data-controller="sortable"
     thead
@@ -22,11 +28,11 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold ESPN Rank
             = chevron_down_icon(tailwind_color: "text-slate-400")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="2" data-action="click->sortable#sort"
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="2" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from ESPN"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold CBS Rank
             = chevron_down_icon(tailwind_color: "text-slate-400")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="3" data-action="click->sortable#sort"
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="3" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from ESPN"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Fantasy Pros Rank
             = chevron_down_icon(tailwind_color: "text-slate-400")
