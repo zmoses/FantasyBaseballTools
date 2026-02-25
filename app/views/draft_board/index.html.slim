@@ -1,7 +1,6 @@
 ruby:
   button_list = [ { label: "Mark All Unclaimed", href: mark_all_unclaimed_players_path, method: :patch } ]
-  # TODO: This will eventually need removed as it completely wipes all players and refetches them, but helpful for debugging in the early stages. Remove eventually.
-  button_list << { label: "Populate Players", href: reset_all_players_path, method: :post }
+  button_list << { label: "Sync Players", href: sync_all_players_path, method: :post }
 
 div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate-700.shadow-md.rounded-lg.bg-clip-border data-controller="search position-filter"
   div.p-4.flex.items-center.justify-between.mb-2
@@ -48,8 +47,15 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
     tbody data-sortable-target="body"
       - @players.each do |player|
         tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row" data-position-filter-target="row" data-positions=player.espn_positions.map(&:position).join(",")
-          td.p-4.border-b.border-slate-700.text-left
-            p.text-sm.text-slate-100= player_logo_name_and_positions(player)
+          td.p-4.border-b.border-slate-700.text-left data-controller="notes" data-notes-update-url-value=update_notes_player_path(player)
+            div.flex.items-center.justify-between
+              p.text-sm.text-slate-100= player_logo_name_and_positions(player)
+              button.p-1.rounded.hover:bg-slate-500.cursor-pointer data-action="click->notes#toggle" type="button"
+                svg.w-4.h-4 class=(player.notes.present? ? "text-amber-400" : "text-slate-500") data-notes-target="indicator" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                  path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+            div.mt-2.hidden data-notes-target="content"
+              textarea.w-full.p-2.text-sm.bg-slate-600.border.border-slate-500.rounded.text-slate-100.placeholder-slate-400.resize-none rows="2" placeholder="Add notes about this player..." data-notes-target="textarea" data-action="blur->notes#save input->notes#debouncedSave"
+                = player.notes
           td.p-4.border-b.border-slate-700
             p.text-sm.text-slate-100.font-semibold= player.espn_rank
           td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.espn_rank, player.cbs_rank)
