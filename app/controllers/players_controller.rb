@@ -7,7 +7,8 @@ class PlayersController < ApplicationController
 
   def claim
     @player = Player.find(params[:id])
-    @player.update(claimed: true)
+    tracking = @player.player_tracking || @player.build_player_tracking
+    tracking.update!(claimed: true)
 
     respond_to do |format|
       format.turbo_stream
@@ -16,14 +17,31 @@ class PlayersController < ApplicationController
   end
 
   def mark_all_unclaimed
-    Player.update_all(claimed: false)
+    PlayerTracking.update_all(claimed: false)
     redirect_to draft_board_index_path
+  end
+
+  def update_notes
+    @player = Player.find(params[:id])
+    tracking = @player.player_tracking || @player.build_player_tracking
+    tracking.update!(notes: params[:notes])
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to draft_board_index_path }
+    end
   end
 
   def reset_all
     ResetPlayersTableJob.perform_later
 
     redirect_to players_path, notice: "Player data reset has started. Please refresh this page in a few minutes to see updated rankings.", status: :see_other
+  end
+
+  def sync_all
+    SyncPlayersJob.perform_later
+
+    redirect_to draft_board_index_path, notice: "Player sync has started. Players not on any 40-man roster will be marked as free agents. Please refresh in a few minutes.", status: :see_other
   end
 
   private

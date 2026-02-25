@@ -1,6 +1,15 @@
 class Player < ApplicationRecord
   has_and_belongs_to_many :espn_positions
+  has_one :player_tracking, dependent: :destroy
   validates :searchable_name, uniqueness: { scope: :team }
+
+  def claimed?
+    player_tracking&.claimed || false
+  end
+
+  def notes
+    player_tracking&.notes
+  end
 
   class UnknownPlayerNameError < StandardError; end
 

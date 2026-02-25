@@ -11,11 +11,13 @@ Rails.application.routes.draw do
   resources :players do
     collection do
       post :reset_all
+      post :sync_all
       patch :mark_all_unclaimed
     end
 
     member do
       patch :claim
+      patch :update_notes
     end
   end
 
