@@ -6,8 +6,8 @@ module Espn
 
     def espn_client
       @client ||= ESPNApi::Client.new(
-        auth_key: ENV["ESPN_KEY"],
-        league_id: ENV["LEAGUE_ID"]
+        auth_key: Rails.application.credentials.espn_key,
+        league_id: Rails.application.credentials.espn_league_id
       )
     end
 
