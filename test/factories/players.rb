@@ -6,7 +6,6 @@ FactoryBot.define do
     espn_rank { 100 }
     cbs_rank { 100 }
     fantasy_pros_rank { 100 }
-    claimed { false }
 
     trait :aaron_judge do
       name { "Aaron Judge" }
@@ -15,7 +14,6 @@ FactoryBot.define do
       cbs_rank { 2 }
       fantasy_pros_rank { 1 }
       team { "NYY" }
-      claimed { false }
     end
 
     trait :max_muncy_lad do
@@ -25,7 +23,6 @@ FactoryBot.define do
       cbs_rank { 145 }
       fantasy_pros_rank { 148 }
       team { "LAD" }
-      claimed { false }
     end
 
     trait :mike_trout do
@@ -35,7 +32,6 @@ FactoryBot.define do
       cbs_rank { 30 }
       fantasy_pros_rank { 28 }
       team { "LAA" }
-      claimed { false }
     end
 
     trait :claimed_player do
@@ -45,7 +41,10 @@ FactoryBot.define do
       cbs_rank { 6 }
       fantasy_pros_rank { 5 }
       team { "BOS" }
-      claimed { true }
+
+      after(:create) do |player|
+        create(:player_tracking, :claimed, player: player)
+      end
     end
 
     trait :no_rank_player do
@@ -55,15 +54,22 @@ FactoryBot.define do
       cbs_rank { 100 }
       fantasy_pros_rank { 95 }
       team { "CHC" }
-      claimed { false }
-    end
-
-    trait :unclaimed do
-      claimed { false }
     end
 
     trait :claimed do
-      claimed { true }
+      after(:create) do |player|
+        create(:player_tracking, :claimed, player: player)
+      end
+    end
+
+    trait :with_notes do
+      transient do
+        notes_content { "Some notes about this player" }
+      end
+
+      after(:create) do |player, evaluator|
+        create(:player_tracking, player: player, notes: evaluator.notes_content)
+      end
     end
 
     trait :with_espn_rank do

@@ -127,4 +127,53 @@ class PlayerTest < ActiveSupport::TestCase
     assert_includes player.espn_positions, position
     assert_includes position.players, player
   end
+
+  test "has_one player_tracking association" do
+    player = create(:player, :aaron_judge)
+    tracking = create(:player_tracking, player: player, notes: "Great power hitter")
+
+    assert_equal tracking, player.player_tracking
+    assert_equal player, tracking.player
+  end
+
+  test "destroys player_tracking when player is destroyed" do
+    player = create(:player, :aaron_judge)
+    create(:player_tracking, player: player)
+
+    assert_difference "PlayerTracking.count", -1 do
+      player.destroy
+    end
+  end
+
+  test "#claimed? returns false when no player_tracking exists" do
+    player = create(:player, :aaron_judge)
+
+    assert_not player.claimed?
+  end
+
+  test "#claimed? returns false when player_tracking exists but claimed is false" do
+    player = create(:player, :aaron_judge)
+    create(:player_tracking, player: player, claimed: false)
+
+    assert_not player.claimed?
+  end
+
+  test "#claimed? returns true when player_tracking exists and claimed is true" do
+    player = create(:player, :claimed_player)
+
+    assert player.claimed?
+  end
+
+  test "#notes returns nil when no player_tracking exists" do
+    player = create(:player, :aaron_judge)
+
+    assert_nil player.notes
+  end
+
+  test "#notes returns notes from player_tracking" do
+    player = create(:player, :aaron_judge)
+    create(:player_tracking, player: player, notes: "Watch for injuries")
+
+    assert_equal "Watch for injuries", player.notes
+  end
 end
