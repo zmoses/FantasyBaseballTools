@@ -3,6 +3,8 @@ require "test_helper"
 class PlayersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @player = create(:player, :aaron_judge)
+    @user = create(:user)
+    sign_in_as(@user)
   end
 
   test "should show player" do

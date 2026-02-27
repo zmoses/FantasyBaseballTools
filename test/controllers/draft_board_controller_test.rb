@@ -1,6 +1,11 @@
 require "test_helper"
 
 class DraftBoardControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = create(:user)
+    sign_in_as(@user)
+  end
+
   test "index renders successfully" do
     get draft_board_index_url
     assert_response :success
