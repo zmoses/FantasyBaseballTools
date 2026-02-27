@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_053327) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_27_052548) do
   create_table "espn_positions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "position", null: false
@@ -45,5 +45,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_053327) do
     t.index ["searchable_name", "team"], name: "index_players_on_searchable_name_and_team", unique: true
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address"
+    t.datetime "updated_at", null: false
+    t.string "user_agent"
+    t.integer "user_id", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
+  end
+
   add_foreign_key "player_trackings", "players"
+  add_foreign_key "sessions", "users"
 end
