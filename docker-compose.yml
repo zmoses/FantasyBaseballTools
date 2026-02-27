@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fantasy_baseball_draft_compare:latest
+    container_name: fantasy_baseball
+    ports:
+      - 3000:80
+    environment:
+      - RAILS_ENV=production
+      - RAILS_MASTER_KEY=${RAILS_MASTER_KEY}
+      - SOLID_QUEUE_IN_PUMA=true
+    volumes:
+      - ${STORAGE_PATH:-./storage}:/rails/storage
+    restart: unless-stopped
+
+volumes:
+  fantasy_storage:
