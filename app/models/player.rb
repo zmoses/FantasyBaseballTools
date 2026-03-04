@@ -1,10 +1,10 @@
 class Player < ApplicationRecord
   has_and_belongs_to_many :espn_positions
-  has_one :player_tracking, dependent: :destroy
+  has_one :user_players, dependent: :destroy
   validates :searchable_name, uniqueness: { scope: :team }
 
   def claimed?
-    player_tracking&.claimed || false
+    player_tracking&.claimed
   end
 
   def notes
