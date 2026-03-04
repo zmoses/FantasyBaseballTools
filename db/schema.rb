@@ -10,8 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_27_052548) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_04_053608) do
+  # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "platforms", ["Fantrax", "ESPN"]
+  create_enum "scoring_format", ["points", "categories"]
 
   create_table "espn_positions", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -24,6 +30,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_052548) do
     t.integer "player_id", null: false
     t.index ["espn_position_id", "player_id"], name: "index_espn_positions_players_on_espn_position_id_and_player_id"
     t.index ["player_id", "espn_position_id"], name: "index_espn_positions_players_on_player_id_and_espn_position_id"
+  end
+
+  create_table "leagues", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.enum "platform", default: "Fantrax", null: false, enum_type: "platforms"
+    t.enum "scoring_format", default: "points", null: false, enum_type: "scoring_format"
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
   end
 
   create_table "player_trackings", force: :cascade do |t|
