@@ -21,11 +21,12 @@ class LeaguesController < ApplicationController
 
   # POST /leagues or /leagues.json
   def create
-    @league = League.new(league_params)
+    @league = League.new(league_params.merge(user_id: Current.session.user.id))
 
     respond_to do |format|
       if @league.save
-        format.html { redirect_to @league, notice: "League was successfully created." }
+        session[:current_league_id] = @league.id
+        format.html { redirect_to draft_board_index_path, notice: "League was successfully created." }
         format.json { render :show, status: :created, location: @league }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -65,6 +66,6 @@ class LeaguesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def league_params
-      params.expect(league: [ :name, :scoring_format, :player_id, :platform ])
+      params.expect(league: [ :name, :scoring_format, :platform, { roster_slots: {} } ])
     end
 end

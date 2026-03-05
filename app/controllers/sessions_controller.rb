@@ -7,8 +7,9 @@ class SessionsController < ApplicationController
 
   def create
     if user = User.authenticate_by(params.permit(:email_address, :password))
+      session[:current_league_id] = user.leagues.first&.id
       start_new_session_for user
-      redirect_to after_authentication_url
+      redirect_to session[:current_league_id] ? after_authentication_url : new_league_path
     else
       redirect_to new_session_path, alert: "Try another email address or password."
     end

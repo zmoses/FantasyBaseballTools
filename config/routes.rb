@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :league_players
   resources :leagues
   resource :session
   resources :passwords, param: :token

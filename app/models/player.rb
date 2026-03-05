@@ -1,6 +1,7 @@
 class Player < ApplicationRecord
   has_and_belongs_to_many :espn_positions
-  has_one :user_players, dependent: :destroy
+  has_many :league_players, dependent: :destroy
+  has_many :user_players, dependent: :destroy
   validates :searchable_name, uniqueness: { scope: :team }
 
   def claimed?
