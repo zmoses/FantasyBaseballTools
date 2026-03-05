@@ -82,7 +82,7 @@ class PlayerTest < ActiveSupport::TestCase
 
   test ".find_best_match finds player by name and team" do
     expected_player = create(:player, :max_muncy_lad)
-    player = Player.find_best_match(name: expected_player.name, team: "LAD")
+    player = Player.find_best_match(name: expected_player.name, mlb_team: "LAD")
     assert_equal expected_player, player
   end
 
@@ -97,7 +97,7 @@ class PlayerTest < ActiveSupport::TestCase
     player = create(:player, :aaron_judge)
 
     # Should find player even if team doesn't match exactly
-    found_player = Player.find_best_match(name: player.name, team: "WRONG_TEAM")
+    found_player = Player.find_best_match(name: player.name, mlb_team: "WRONG_TEAM")
     assert_equal player, found_player
   end
 

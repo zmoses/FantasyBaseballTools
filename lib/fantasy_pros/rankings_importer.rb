@@ -1,6 +1,7 @@
 module FantasyPros
   class RankingsImporter < BaseRankingsImporter
-    RANKINGS_URL = "https://www.fantasypros.com/mlb/rankings/overall.php"
+    POINTS_RANKINGS_URL = "https://www.fantasypros.com/mlb/rankings/overall.php"
+    CATS_RANKINGS_URL = POINTS_RANKINGS_URL
 
     private
 

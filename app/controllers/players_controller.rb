@@ -39,7 +39,7 @@ class PlayersController < ApplicationController
   end
 
   def sync_all
-    SyncPlayersJob.perform_later
+    SyncPlayersJob.perform_now(league: @current_league)
 
     redirect_to draft_board_index_path, notice: "Player sync has started. Players not on any 40-man roster will be marked as free agents. Please refresh in a few minutes.", status: :see_other
   end
@@ -52,6 +52,6 @@ class PlayersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def player_params
-      params.expect(player: [ :name, :espn_rank, :cbs_rank, :fantasy_pros_rank, :team ])
+      params.expect(player: [ :name, :mlb_team ])
     end
 end

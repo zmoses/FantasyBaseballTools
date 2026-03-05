@@ -1,5 +1,6 @@
 class BaseRankingsImporter < ServiceObject
-  def call
+  def call(league)
+    @league = league
     save_players
   end
 
@@ -8,13 +9,15 @@ class BaseRankingsImporter < ServiceObject
   def save_players
     players.each do |attrs|
       begin
-        player = Player.find_best_match(name: attrs[:name], team: attrs[:team], position: attrs[:position])
+        player = Player.find_best_match(name: attrs[:name], mlb_team: attrs[:team], position: attrs[:position])
       rescue Player::UnknownPlayerNameError
         next
       end
 
-      rank_field = "#{ranking_type}_rank".to_sym
-      player.update_column(rank_field, attrs[rank_field])
+      league_player = LeaguePlayer.find_or_initialize_by(league_id: @league.id, player_id: player.id)
+      league_player.ranks = (league_player.ranks || {}).merge(ranking_type => attrs["#{ranking_type}_rank".to_sym])
+      league_player.ranks_synced_at = Time.now
+      league_player.save!
 
       additional_updates(player, attrs)
     end

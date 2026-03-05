@@ -15,7 +15,7 @@ class SyncPlayersJob < ApplicationJob
 
         player = Player.find_or_initialize_by(searchable_name: searchable)
         player.name = player_name
-        player.team = team_abbr
+        player.mlb_team = team_abbr
         player.save!
 
         seen_player_ids << player.id
@@ -26,6 +26,6 @@ class SyncPlayersJob < ApplicationJob
     Player.where.not(id: seen_player_ids).where.not(team: "FA").update_all(team: "FA")
 
     # Assign fantasy rankings to imported players from various sources
-    RankingsAggregator.call
+    RankingsAggregator.call(league)
   end
 end

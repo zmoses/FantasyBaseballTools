@@ -27,6 +27,8 @@ Rails.application.routes.draw do
 
   resources :draft_board, only: [ :index ]
 
+  post "switch_league" => "application#switch_league", as: :switch_league
+
   # Defines the root path route ("/")
   root "draft_board#index"
 end

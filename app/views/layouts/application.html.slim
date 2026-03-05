@@ -22,6 +22,7 @@ html
     = javascript_importmap_tags
 
   body.bg-slate-800
+    = render "shared/navbar"
     = render "shared/flash"
-    main class="container mx-auto mt-28 px-5 flex"
+    main class="container mx-auto mt-16 pt-8 px-5 flex"
       = yield

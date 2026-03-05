@@ -2,7 +2,7 @@ class Player < ApplicationRecord
   has_and_belongs_to_many :espn_positions
   has_many :league_players, dependent: :destroy
   has_many :user_players, dependent: :destroy
-  validates :searchable_name, uniqueness: { scope: :team }
+  validates :searchable_name, uniqueness: { scope: :mlb_team }
 
   def claimed?
     player_tracking&.claimed
@@ -25,10 +25,10 @@ class Player < ApplicationRecord
     self.espn_positions << espn_position unless self.espn_positions.include?(espn_position)
   end
 
-  def self.find_best_match(name:, team: nil, position: nil)
+  def self.find_best_match(name:, mlb_team: nil, position: nil)
     # TODO: hard code fixes are gross. See if we can handle these edge cases better.
-    # Two Max Muncys who play the same position, and CBS doesn't provide a team. One is fantasy irrelevant, so assume we mean the LAD one
-    team = "LAD" if Player.searchable_name(name) == "maxmuncy"
+    # Two Max Muncys who play the same position, and CBS doesn't provide a mlb_team. One is fantasy irrelevant, so assume we mean the LAD one
+    mlb_team = "LAD" if Player.searchable_name(name) == "maxmuncy"
     # Zach == Zachary
     name = "zachneto" if Player.searchable_name(name) == "zacharyneto"
     # Josh == Joshua
@@ -43,7 +43,7 @@ class Player < ApplicationRecord
     raise UnknownPlayerNameError if Player.searchable_name(name) == "ryanpressly"
 
     where_clause = { searchable_name: Player.searchable_name(name) }
-    where_clause[:team] = team if team
+    where_clause[:mlb_team] = mlb_team if mlb_team
     begin
       where_clause[:espn_positions] = { position: EspnPosition.position_map(position) } if position
     rescue EspnPosition::UnknownPositionError
@@ -54,13 +54,13 @@ class Player < ApplicationRecord
 
     return matching_players.first if matching_players.count == 1
 
-    raise UnknownPlayerNameError, "(#{matching_players.count} matches) players found with params: name(#{name}) team(#{team}) position(#{position})" if matching_players.count.positive?
+    raise UnknownPlayerNameError, "(#{matching_players.count} matches) players found with params: name(#{name}) mlb_team(#{mlb_team}) position(#{position})" if matching_players.count.positive?
 
     # If we have no matches, loosen the params and try again
     if matching_players.count.zero?
-      # Try search with no team - maybe got traded or is a free agent now?
-      if team.present?
-        matching_players = Player.left_joins(:espn_positions).where(where_clause.reject { |key| key == :team }).distinct
+      # Try search with no mlb_team - maybe got traded or is a free agent now?
+      if mlb_team.present?
+        matching_players = Player.left_joins(:espn_positions).where(where_clause.reject { |key| key == :mlb_team }).distinct
         return matching_players.first if matching_players.count == 1
       end
 

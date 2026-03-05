@@ -2,7 +2,8 @@ require "espn_api"
 
 module Espn
   class RankingsImporter < BaseRankingsImporter
-    RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2026-espn-cockcroft"
+    POINTS_RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35437997/fantasy-baseball-rankings-points-leagues-2026-espn-cockcroft"
+    CATS_RANKINGS_URL = "https://www.espn.com/fantasy/baseball/story/_/id/35438162/fantasy-baseball-rankings-head-head-rotisserie-leagues-2026-espn-karabell"
 
     def espn_client
       @client ||= ESPNApi::Client.new(

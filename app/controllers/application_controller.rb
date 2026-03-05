@@ -10,4 +10,9 @@ class ApplicationController < ActionController::Base
 
     @current_league ||= Current.session.user.leagues.find_by(id: session[:current_league_id])
   end
+
+  def switch_league
+    session[:current_league_id] = params[:league_id].presence
+    redirect_back_or_to root_path
+  end
 end
