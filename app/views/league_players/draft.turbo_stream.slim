@@ -1,1 +1,4 @@
 = turbo_stream.remove dom_id(@league_player)
+- if @league_player.roster_status == "drafted_by_user"
+  = turbo_stream.update "roster-panel" do
+    = render "draft_board/roster_panel", league: @current_league
