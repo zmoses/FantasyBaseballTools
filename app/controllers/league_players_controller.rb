@@ -44,6 +44,11 @@ class LeaguePlayersController < ApplicationController
     end
   end
 
+  def mark_all_available
+    LeaguePlayer.where(league_id: @current_league.id).update_all(roster_status: "available")
+    redirect_to draft_board_index_path
+  end
+
   # PATCH/PUT /league_players/1 or /league_players/1.json
   def update
     respond_to do |format|

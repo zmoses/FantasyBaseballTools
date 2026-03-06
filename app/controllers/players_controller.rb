@@ -16,11 +16,6 @@ class PlayersController < ApplicationController
     end
   end
 
-  def mark_all_unclaimed
-    PlayerTracking.update_all(claimed: false)
-    redirect_to draft_board_index_path
-  end
-
   def update_notes
     @player = Player.find(params[:id])
     tracking = @player.player_tracking || @player.build_player_tracking
@@ -39,7 +34,7 @@ class PlayersController < ApplicationController
   end
 
   def sync_all
-    SyncPlayersJob.perform_now(league: @current_league)
+    SyncPlayersJob.perform_later(league: @current_league)
 
     redirect_to draft_board_index_path, notice: "Player sync has started. Players not on any 40-man roster will be marked as free agents. Please refresh in a few minutes.", status: :see_other
   end

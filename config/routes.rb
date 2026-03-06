@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
   resources :league_players do
+    collection do
+      patch :mark_all_available
+    end
+
     member do
       patch :draft
     end
   end
+
   resources :leagues
+
   resource :session
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -20,7 +26,6 @@ Rails.application.routes.draw do
     collection do
       post :reset_all
       post :sync_all
-      patch :mark_all_unclaimed
     end
 
     member do
