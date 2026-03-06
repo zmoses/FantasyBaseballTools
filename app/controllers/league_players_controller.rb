@@ -1,5 +1,5 @@
 class LeaguePlayersController < ApplicationController
-  before_action :set_league_player, only: %i[ show edit update destroy ]
+  before_action :set_league_player, only: %i[ show edit update destroy draft ]
 
   # GET /league_players or /league_players.json
   def index
@@ -31,6 +31,16 @@ class LeaguePlayersController < ApplicationController
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @league_player.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def draft
+    status = params[:status].presence_in(%w[drafted drafted_by_user])
+    @league_player.update!(roster_status: status) if status
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to draft_board_index_path }
     end
   end
 

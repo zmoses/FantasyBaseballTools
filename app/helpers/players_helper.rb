@@ -1,7 +1,7 @@
 module PlayersHelper
   def player_logo_name_and_positions(player)
     logo = player.mlb_team ? image_tag("mlb_logos/#{player.mlb_team}.png", size: 30) : "(FA)"
-    positions = player.espn_positions.map(&:position).join(", ")
+    positions = player.position_eligibility.join(", ")
 
     safe_join([
       content_tag(:span, logo, class: "mr-4 inline-block align-middle"),

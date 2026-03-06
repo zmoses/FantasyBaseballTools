@@ -9,7 +9,7 @@ class BaseRankingsImporter < ServiceObject
   def save_players
     players.each do |attrs|
       begin
-        player = Player.find_best_match(name: attrs[:name], mlb_team: attrs[:team], position: attrs[:position])
+        player = Player.find_best_match(name: attrs[:name], mlb_team: attrs[:team], position: attrs[:position], league: @league)
       rescue Player::UnknownPlayerNameError
         next
       end
@@ -19,12 +19,13 @@ class BaseRankingsImporter < ServiceObject
       league_player.ranks_synced_at = Time.now
       league_player.save!
 
-      additional_updates(player, attrs)
+      additional_updates(league_player, attrs)
     end
   end
 
   def html_content
-    @html_content ||= Nokogiri::HTML(Net::HTTP.get(URI(self.class::RANKINGS_URL)))
+    url = @league.scoring_format == "points" ? self.class::POINTS_RANKINGS_URL : self.class::CATS_RANKINGS_URL
+    @html_content ||= Nokogiri::HTML(Net::HTTP.get(URI(url)))
   end
 
   def players
@@ -35,7 +36,7 @@ class BaseRankingsImporter < ServiceObject
     self.class.module_parent.to_s.underscore
   end
 
-  def additional_updates(player, attrs)
+  def additional_updates(league_player, attrs)
     # Used for overriding in subclasses, but not required
   end
 

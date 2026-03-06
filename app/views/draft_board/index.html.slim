@@ -1,6 +1,10 @@
 ruby:
   button_list = [ { label: "Mark All Unclaimed", href: mark_all_unclaimed_players_path, method: :patch } ]
   button_list << { label: "Sync Players", href: sync_all_players_path, method: :post }
+  primary_key = @current_league.platform
+  secondary_key = @current_league.espn? ? "fantrax" : "espn"
+  primary_label = @current_league.espn? ? "ESPN" : "Fantrax"
+  secondary_label = @current_league.espn? ? "Fantrax" : "ESPN"
 
 div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate-700.shadow-md.rounded-lg.bg-clip-border data-controller="search position-filter"
   div.p-4.flex.items-center.justify-between.mb-2
@@ -23,30 +27,34 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
     span.text-amber-500 ⌥+click
     = " (macOS) or "
     span.text-amber-500 Alt+click
-    = " (Windows) CBS/Fantasy Pros to sort by difference from ESPN."
+    = " (Windows) #{secondary_label}/CBS/Fantasy Pros to sort by difference from #{primary_label}."
 
   table.w-full.text-center.table-auto.min-w-max id="players-table" data-controller="sortable"
     thead
       tr
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-2/5.text-left
+        th.p-4.border-b.border-slate-600.bg-slate-600.text-left
           p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Name
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="1" data-action="click->sortable#sort"
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/8 data-sortable-target="header" data-column-index="1" data-action="click->sortable#sort"
           div.flex.items-center.justify-center.cursor-pointer
-            p.text-sm.font-normal.leading-none.text-slate-300.font-semibold ESPN Rank
+            p.text-sm.font-normal.leading-none.text-slate-300.font-semibold= "#{primary_label} Rank"
             = chevron_down_icon(tailwind_color: "text-slate-400")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="2" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from ESPN"
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/8 data-sortable-target="header" data-column-index="2" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from #{primary_label}"
+          div.flex.items-center.justify-center.cursor-pointer
+            p.text-sm.font-normal.leading-none.text-slate-300.font-semibold= "#{secondary_label} Rank"
+            = chevron_down_icon(tailwind_color: "text-slate-400")
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/8 data-sortable-target="header" data-column-index="3" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from #{primary_label}"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold CBS Rank
             = chevron_down_icon(tailwind_color: "text-slate-400")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/6 data-sortable-target="header" data-column-index="3" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from ESPN"
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/8 data-sortable-target="header" data-column-index="4" data-supports-diff="true" data-action="click->sortable#sort" title="⌥+click to sort by difference from #{primary_label}"
           div.flex.items-center.justify-center.cursor-pointer
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Fantasy Pros Rank
             = chevron_down_icon(tailwind_color: "text-slate-400")
-        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/12
+        th.p-4.border-b.border-slate-600.bg-slate-600.w-1/8
           p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Draft
     tbody data-sortable-target="body"
       - @players.each do |player|
-        tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row" data-position-filter-target="row" data-positions=player.espn_positions.map(&:position).join(",")
+        tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row" data-position-filter-target="row" data-positions=player.position_eligibility.join(",")
           td.p-4.border-b.border-slate-700.text-left data-controller="notes" data-notes-update-url-value=update_notes_player_path(player)
             div.flex.items-center.justify-between
               p.text-sm.text-slate-100= player_logo_name_and_positions(player)
@@ -57,13 +65,24 @@ div.relative.flex.flex-col.w-full.h-full.overflow-scroll.text-slate-300.bg-slate
               textarea.w-full.p-2.text-sm.bg-slate-600.border.border-slate-500.rounded.text-slate-100.placeholder-slate-400.resize-none rows="2" placeholder="Add notes about this player..." data-notes-target="textarea" data-action="blur->notes#save input->notes#debouncedSave"
                 = player.notes
           td.p-4.border-b.border-slate-700
-            p.text-sm.text-slate-100.font-semibold= player.espn_rank
-          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.espn_rank, player.cbs_rank)
-            p.text-sm.text-slate-100.font-semibold= player.cbs_rank
-          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.espn_rank, player.fantasy_pros_rank)
-            p.text-sm.text-slate-100.font-semibold= player.fantasy_pros_rank
+            p.text-sm.text-slate-100.font-semibold= player.ranks[primary_key]
+          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.ranks[primary_key], player.ranks[secondary_key])
+            p.text-sm.text-slate-100.font-semibold= player.ranks[secondary_key]
+          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.ranks[primary_key], player.ranks["cbs"])
+            p.text-sm.text-slate-100.font-semibold= player.ranks["cbs"]
+          td.p-4.border-b.border-slate-700 style=rank_diff_cell_style(player.ranks[primary_key], player.ranks["fantasy_pros"])
+            p.text-sm.text-slate-100.font-semibold= player.ranks["fantasy_pros"]
           td.p-4.border-b.border-slate-700
-            p.text-sm.text-slate-100.font-semibold= button_to "Claimed",
-              claim_player_path(player),
-              method: :patch,
-              class: "bg-red-600 hover:bg-red-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer"
+            div.flex.items-center.justify-center.gap-1
+              = button_to "Claimed",
+                draft_league_player_path(player),
+                method: :patch,
+                params: { status: "drafted" },
+                class: "bg-red-600 hover:bg-red-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer",
+                form: { data: { action: "submit->search#clear" } }
+              = button_to "Draft!",
+                draft_league_player_path(player),
+                method: :patch,
+                params: { status: "drafted_by_user" },
+                class: "bg-green-600 hover:bg-green-700 text-white text-[11px] font-medium p-1 rounded cursor-pointer",
+                form: { data: { action: "submit->search#clear" } }

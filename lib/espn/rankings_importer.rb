@@ -46,12 +46,13 @@ module Espn
       }
     end
 
-    def position_map
-      @position_map ||= EspnPosition.all.index_by(&:position)
-    end
-
-    def additional_updates(player, attrs)
-      player.espn_positions = attrs[:eligible_positions].map { |p| position_map[p] }.compact
+    def additional_updates(league_player, attrs)
+      positions = attrs[:eligible_positions].filter_map do |p|
+        EspnPosition.position_map(p)
+      rescue EspnPosition::UnknownPositionError
+        nil
+      end
+      league_player.update!(position_eligibility: positions)
     end
   end
 end

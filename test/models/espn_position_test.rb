@@ -1,16 +1,6 @@
 require "test_helper"
 
 class EspnPositionTest < ActiveSupport::TestCase
-  test "has_and_belongs_to_many players association" do
-    position = create(:espn_position, :outfield)
-    player = create(:player, :aaron_judge)
-
-    position.players << player
-
-    assert_includes position.players, player
-    assert_includes player.espn_positions, position
-  end
-
   test ".position_map returns valid position unchanged" do
     assert_equal "1B", EspnPosition.position_map("1B")
     assert_equal "2B", EspnPosition.position_map("2B")

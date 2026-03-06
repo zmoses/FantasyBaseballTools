@@ -23,6 +23,11 @@ export default class extends Controller {
     })
   }
 
+  clear() {
+    this.inputTarget.value = ""
+    this.filter()
+  }
+
   comparableTerm(str) {
     return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   }

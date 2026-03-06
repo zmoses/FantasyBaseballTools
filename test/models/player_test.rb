@@ -53,27 +53,6 @@ class PlayerTest < ActiveSupport::TestCase
     assert_equal "michaeltaylor", Player.searchable_name("Michael A. Taylor")
   end
 
-  test "#add_position_eligibility adds new position" do
-    player = create(:player, :aaron_judge)
-    initial_count = player.espn_positions.count
-
-    player.add_position_eligibility("OF")
-
-    assert_equal initial_count + 1, player.espn_positions.count
-    assert player.espn_positions.exists?(position: "OF")
-  end
-
-  test "#add_position_eligibility does not add duplicate position" do
-    player = create(:player, :aaron_judge)
-    position = create(:espn_position, :outfield)
-    player.espn_positions << position
-
-    initial_count = player.espn_positions.count
-    player.add_position_eligibility("OF")
-
-    assert_equal initial_count, player.espn_positions.count
-  end
-
   test ".find_best_match finds player by name only" do
     expected_player = create(:player, :aaron_judge)
     player = Player.find_best_match(name: expected_player.name)
@@ -101,31 +80,23 @@ class PlayerTest < ActiveSupport::TestCase
     assert_equal player, found_player
   end
 
-  test ".find_best_match with position filters by espn_positions" do
+  test ".find_best_match with position filters by league_player position_eligibility" do
     player = create(:player, :aaron_judge)
-    outfield_position = create(:espn_position, :outfield)
-    player.espn_positions << outfield_position
+    league = League.create!(name: "Test", platform: "ESPN", scoring_format: "points")
+    LeaguePlayer.create!(league: league, player: player, position_eligibility: [ "OF" ])
 
-    found_player = Player.find_best_match(name: player.name, position: "OF")
+    found_player = Player.find_best_match(name: player.name, position: "OF", league: league)
     assert_equal player, found_player
   end
 
-  test ".find_best_match falls back to searching without position" do
+  test ".find_best_match falls back to searching without position when position_eligibility does not match" do
     player = create(:player, :aaron_judge)
+    league = League.create!(name: "Test", platform: "ESPN", scoring_format: "points")
+    LeaguePlayer.create!(league: league, player: player, position_eligibility: [ "OF" ])
 
-    # Should find player even without position match
-    found_player = Player.find_best_match(name: player.name, position: "1B")
+    # Position "1B" won't match OF in position_eligibility; falls back to name-only search
+    found_player = Player.find_best_match(name: player.name, position: "1B", league: league)
     assert_equal player, found_player
-  end
-
-  test "has_and_belongs_to_many espn_positions association" do
-    player = create(:player, :aaron_judge)
-    position = create(:espn_position, :outfield)
-
-    player.espn_positions << position
-
-    assert_includes player.espn_positions, position
-    assert_includes position.players, player
   end
 
   test "has_one player_tracking association" do

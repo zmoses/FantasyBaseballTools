@@ -1,6 +1,4 @@
 class EspnPosition < ApplicationRecord
-  has_and_belongs_to_many :players
-
   class UnknownPositionError < StandardError; end
 
   def self.position_map(position)
