@@ -9,6 +9,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ai_requests do
+    collection do
+      post :player_recommendations
+    end
+  end
+
   resources :leagues
 
   resource :session

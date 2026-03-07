@@ -1,6 +1,7 @@
 ruby:
   button_list = [ { label: "Mark All Available", href: mark_all_available_league_players_path, method: :patch } ]
   button_list << { label: "Sync Players", href: sync_all_players_path, method: :post }
+  button_list << { label: "Who should I draft?" href: player_recommendations_ai_requests, method: :post}
   primary_key = @current_league.platform
   secondary_key = @current_league.espn? ? "fantrax" : "espn"
   primary_label = @current_league.espn? ? "ESPN" : "Fantrax"
