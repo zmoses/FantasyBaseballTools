@@ -1,6 +1,6 @@
 module PlayersHelper
   def player_logo_name_and_positions(player)
-    logo = player.mlb_team ? image_tag("mlb_logos/#{player.mlb_team}.png", size: 30) : "(FA)"
+    logo = player.mlb_team != "FA" ? image_tag("mlb_logos/#{player.mlb_team}.png", size: 30) : "(FA)"
     positions = player.position_eligibility.join(", ")
 
     safe_join([
