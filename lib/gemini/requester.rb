@@ -31,7 +31,7 @@ module Gemini
       request.body = JSON.generate({
         contents: [ {
           parts: [
-            { text: "The user is in a fantasy baseball #{league.scoring_format} league. They want to draft their next player. Can you recommend them 5 players and give a short explanation why? Their current team looks like: #{team_players}. The next hundred players on the draft board are: #{top_players}." }
+            { text: "The user is in a fantasy baseball #{league.scoring_format} league. They want to draft their next player. Can you recommend them 5 players and give a short explanation why? I want you to consider mostly on projections for the #{Time.now.year} season. I also want you to factor in the strengths and weaknesses of other players on the team (for example, HR or SB potential), not just what positions the player needs to fill are. Their current team looks like: #{team_players}. The next hundred players on the draft board are: #{top_players}." }
           ]
         } ],
         generationConfig: {
@@ -44,9 +44,9 @@ module Gemini
                 items: {
                   type: "object",
                   properties: {
-                    name: { type: "string", description: "Name of the ingredient." },
-                    position: { type: "string", description: "Quantity of the ingredient, including units." },
-                    reasoning: { type: "string", description: "Quantity of the ingredient, including units." }
+                    name: { type: "string", description: "Name of the player." },
+                    position: { type: "string", description: "The position the player plays in a two-letter format." },
+                    reasoning: { type: "string", description: "A short one to two sentence description of why this player was selected." }
                   },
                   required: [ "name", "position", "reasoning" ]
                 }
@@ -58,9 +58,7 @@ module Gemini
       })
 
       response = http.request(request)
-      x = JSON.parse(response.body)
-      binding.pry
-      puts x
+      JSON.parse(response.body)
     end
   end
 end

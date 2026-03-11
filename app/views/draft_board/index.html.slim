@@ -1,13 +1,13 @@
 ruby:
   button_list = [ { label: "Mark All Available", href: mark_all_available_league_players_path, method: :patch } ]
   button_list << { label: "Sync Players", href: sync_all_players_path, method: :post }
-  button_list << { label: "Who should I draft?" href: player_recommendations_ai_requests, method: :post}
+  button_list << { label: "Who should I draft?", href: player_recommendations_ai_requests_path, method: :post, data: { action: "submit->recommendations#fetch" } }
   primary_key = @current_league.platform
   secondary_key = @current_league.espn? ? "fantrax" : "espn"
   primary_label = @current_league.espn? ? "ESPN" : "Fantrax"
   secondary_label = @current_league.espn? ? "Fantrax" : "ESPN"
 
-div.flex.gap-4.w-full.h-full.min-h-0
+div.flex.gap-4.w-full.h-full.min-h-0 data-controller="recommendations"
   div.flex.flex-col.flex-1.min-w-0.overflow-scroll.text-slate-300.bg-slate-700.shadow-md.rounded-lg.bg-clip-border data-controller="search position-filter"
     div.p-4.flex.items-center.justify-between.mb-2
       div.flex.items-center.gap-6
@@ -56,7 +56,7 @@ div.flex.gap-4.w-full.h-full.min-h-0
             p.text-sm.font-normal.leading-none.text-slate-300.font-semibold Draft
       tbody data-sortable-target="body"
         - @players.each do |player|
-          tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row" data-position-filter-target="row" data-positions=player.position_eligibility.join(",")
+          tr.hover:bg-slate-600 id=dom_id(player) data-search-target="row" data-position-filter-target="row" data-recommendations-target="row" data-positions=player.position_eligibility.join(",") data-player-name=player.name
             td.p-4.border-b.border-slate-700.text-left data-controller="notes" data-notes-update-url-value=update_notes_player_path(player)
               div.flex.items-center.justify-between
                 p.text-sm.text-slate-100= player_logo_name_and_positions(player)
@@ -90,3 +90,10 @@ div.flex.gap-4.w-full.h-full.min-h-0
                   form: { data: { action: "submit->search#clear" } }
   div.w-56.flex-shrink-0.overflow-y-auto.bg-slate-700.shadow-md.rounded-lg.p-4.text-slate-300 id="roster-panel"
     = render "draft_board/roster_panel", league: @current_league
+  div.fixed.bottom-4.right-4.w-96.bg-slate-800.border.border-slate-600.rounded-lg.shadow-xl.z-50.hidden data-recommendations-target="panel"
+    div.flex.items-center.justify-between.p-4.border-b.border-slate-600
+      p.font-semibold.text-slate-100 AI Draft Recommendations
+      button.p-1.rounded.hover:bg-slate-600.cursor-pointer type="button" data-action="click->recommendations#close"
+        svg.w-5.h-5 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
+    div.overflow-y-auto.max-h-96 data-recommendations-target="list"
