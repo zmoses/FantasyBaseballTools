@@ -5,6 +5,11 @@ class League < ApplicationRecord
   before_save :compact_roster_slots
 
   has_many :league_players
+  after_create :sync_players
+
+  def sync_players
+    SyncPlayersJob.perform_later(league: self)
+  end
 
   private
 
