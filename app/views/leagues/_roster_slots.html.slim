@@ -6,13 +6,13 @@ ruby:
     "Reserves" => %w[BN IL]
   }
 
-.grid.grid-cols-4.gap-6
+div.grid.grid-cols-4.gap-6
   - position_groups.each do |group_name, positions|
     div
       p.text-xs.font-semibold.uppercase.tracking-wider.text-gray-500.mb-2 = group_name
-      .space-y-2
+      div.space-y-2
         - positions.each do |pos|
           - count = league.roster_slots&.fetch(pos, 0).to_i
-          .flex.items-center.gap-2
+          div.flex.items-center.gap-2
             label.text-sm.font-medium.w-10.text-right.shrink-0 = pos
-            = form.number_field "roster_slots[#{pos}]", value: count, min: 0, class: "w-16 block shadow-sm rounded-md border border-gray-400 px-3 py-1.5 text-sm focus:outline-blue-600"
+            = number_field_tag "league[roster_slots][#{pos}]", count, min: 0, class: "w-16 block shadow-sm rounded-md border border-gray-400 px-3 py-1.5 text-sm focus:outline-blue-600"

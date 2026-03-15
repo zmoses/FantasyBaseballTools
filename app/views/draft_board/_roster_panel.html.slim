@@ -1,8 +1,5 @@
 p.text-sm.font-semibold.text-slate-200.mb-4 My Team
-- drafted = league.league_players
-    .where(roster_status: :drafted_by_user)
-    .joins(:player)
-    .to_a
+- drafted = league.league_players.where(roster_status: :drafted_by_user).joins(:player).to_a
 - remaining = drafted.dup
 
 - if league.roster_slots.blank?
