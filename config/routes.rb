@@ -34,9 +34,10 @@ Rails.application.routes.draw do
       post :reset_all
       post :sync_all
     end
+  end
 
-    member do
-      patch :claim
+  resources :user_players do
+    collection do
       patch :update_notes
     end
   end

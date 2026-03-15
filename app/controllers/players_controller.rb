@@ -5,28 +5,6 @@ class PlayersController < ApplicationController
   def show
   end
 
-  def claim
-    @player = Player.find(params[:id])
-    tracking = @player.player_tracking || @player.build_player_tracking
-    tracking.update!(claimed: true)
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to players_path, notice: "Player claimed." }
-    end
-  end
-
-  def update_notes
-    @player = Player.find(params[:id])
-    tracking = @player.player_tracking || @player.build_player_tracking
-    tracking.update!(notes: params[:notes])
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to draft_board_index_path }
-    end
-  end
-
   def reset_all
     ResetPlayersTableJob.perform_later
 
