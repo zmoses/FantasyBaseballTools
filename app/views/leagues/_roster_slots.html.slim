@@ -9,7 +9,7 @@ ruby:
 div.grid.grid-cols-4.gap-6
   - position_groups.each do |group_name, positions|
     div
-      p.text-xs.font-semibold.uppercase.tracking-wider.text-gray-500.mb-2 = group_name
+      p.text-xs.font-semibold.uppercase.tracking-wider.text-slate-500.mb-2 = group_name
       div.space-y-2
         - positions.each do |pos|
           - count = league.roster_slots&.fetch(pos, 0).to_i
